@@ -33,6 +33,17 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
+                            <label for="email" class="form-label">E-mail*</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Telefon*</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="000-000-000">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="pump_model" class="form-label">Pompa Panasonic*</label>
                             <input type="text" class="form-control" id="pump_model" name="pump_model" required placeholder="np. seria K">
                         </div>
@@ -93,6 +104,7 @@
     </div>
 </div>
 
+<!-- Preview Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

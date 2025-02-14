@@ -26,6 +26,8 @@ def generate_document():
             "street": request.form.get("street", ""),
             "city": request.form.get("city", ""),
             "postal_code": request.form.get("postal_code", ""),
+            "email": request.form.get("email", ""),
+            "phone": request.form.get("phone", ""),
             "pump_model": request.form.get("pump_model", ""),
             "power": request.form.get("power", ""),
             "all_in_one": "tak" if request.form.get("all_in_one") else "nie",
@@ -35,7 +37,9 @@ def generate_document():
         }
 
         # Validate form data
-        if not all(value for key, value in form_data.items() if key != "all_in_one"):
+        required_fields = ["client_name", "street", "city", "postal_code", "email", "phone", 
+                         "pump_model", "power", "water_tank", "heat_buffer"]
+        if not all(form_data.get(field) for field in required_fields):
             flash("Proszę wypełnić wszystkie wymagane pola formularza", "error")
             return redirect(url_for("index"))
 

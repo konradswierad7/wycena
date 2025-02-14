@@ -19,19 +19,53 @@ class DocumentHandler:
                     continue
 
                 text = paragraph.text
+                runs = paragraph.runs
+
+                # Zachowaj formatowanie pierwszego runa (jeśli istnieje)
+                original_font = None
+                original_size = None
+                original_bold = None
+                original_italic = None
+                if runs:
+                    original_font = runs[0].font.name
+                    original_size = runs[0].font.size
+                    original_bold = runs[0].font.bold
+                    original_italic = runs[0].font.italic
+
                 if text.startswith("Dla:"):
-                    paragraph.text = f"Dla: {data.get('client_name', '')}"
+                    new_text = f"Dla: {data.get('client_name', '')}"
                 elif text.startswith("Adres:"):
-                    paragraph.text = f"Adres: {data.get('street', '')}, {data.get('postal_code', '')} {data.get('city', '')}"
+                    new_text = f"Adres: {data.get('street', '')}, {data.get('postal_code', '')} {data.get('city', '')}"
+                elif text.startswith("E-mail:"):
+                    new_text = f"E-mail: {data.get('email', '')}"
+                elif text.startswith("Tel."):
+                    new_text = f"Tel. {data.get('phone', '')}"
                 elif text.startswith("PANASONIC"):
                     pump_type = "all-in-one" if data.get("all_in_one") == "tak" else "split"
-                    paragraph.text = f"PANASONIC {data.get('pump_model', '')} {data.get('power', '')}kW ({pump_type}) – zestaw"
+                    new_text = f"PANASONIC {data.get('pump_model', '')} {data.get('power', '')}kW ({pump_type}) – zestaw"
                 elif text.startswith("zbiornik ciepłej wody:"):
-                    paragraph.text = f"zbiornik ciepłej wody: {data.get('water_tank', '')}"
+                    new_text = f"zbiornik ciepłej wody: {data.get('water_tank', '')}"
                 elif text.startswith("bufor ciepła:"):
-                    paragraph.text = f"bufor ciepła: {data.get('heat_buffer', '')}"
+                    new_text = f"bufor ciepła: {data.get('heat_buffer', '')}"
                 elif "Cena całkowita:" in text:
-                    paragraph.text = f"Cena całkowita: **{data.get('price_brutto', '')} zł brutto** (z 8% VAT)"
+                    new_text = f"Cena całkowita: **{data.get('price_brutto', '')} zł brutto** (z 8% VAT)"
+                else:
+                    continue
+
+                # Usuń istniejące runy
+                for _ in range(len(paragraph.runs)):
+                    paragraph._p.remove(paragraph.runs[0]._r)
+
+                # Dodaj nowy run z zachowaniem oryginalnego formatowania
+                run = paragraph.add_run(new_text)
+                if original_font:
+                    run.font.name = original_font
+                if original_size:
+                    run.font.size = original_size
+                if original_bold is not None:
+                    run.font.bold = original_bold
+                if original_italic is not None:
+                    run.font.italic = original_italic
 
             # Generate unique filename
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -62,6 +96,8 @@ class DocumentHandler:
                 <div class="preview-header">
                     <h1>Oferta dla: {client_name}</h1>
                     <p>Adres: {street}, {postal_code} {city}</p>
+                    <p>E-mail: {email}</p>
+                    <p>Tel. {phone}</p>
                 </div>
                 <div class="preview-content">
                     <p><strong>Szczegóły techniczne:</strong><br>
@@ -79,6 +115,8 @@ class DocumentHandler:
                 'street': data.get('street', ''),
                 'city': data.get('city', ''),
                 'postal_code': data.get('postal_code', ''),
+                'email': data.get('email', ''),
+                'phone': data.get('phone', ''),
                 'pump_model': data.get('pump_model', ''),
                 'power': data.get('power', ''),
                 'pump_type': 'all-in-one' if data.get('all_in_one') == 'tak' else 'split',
