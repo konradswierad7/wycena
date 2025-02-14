@@ -23,27 +23,33 @@ def generate_document():
         # Get form data
         form_data = {
             "client_name": request.form.get("client_name", ""),
-            "service_details": request.form.get("service_details", ""),
-            "price": request.form.get("price", ""),
-            "date": request.form.get("date", ""),
-            "company_name": request.form.get("company_name", ""),
-            "contact_person": request.form.get("contact_person", ""),
-            "email": request.form.get("email", "")
+            "street": request.form.get("street", ""),
+            "city": request.form.get("city", ""),
+            "postal_code": request.form.get("postal_code", ""),
+            "pump_model": request.form.get("pump_model", ""),
+            "power": request.form.get("power", ""),
+            "all_in_one": "tak" if request.form.get("all_in_one") else "nie",
+            "water_tank": request.form.get("water_tank", ""),
+            "heat_buffer": request.form.get("heat_buffer", ""),
+            "price_brutto": request.form.get("price_brutto") or str(round(float(request.form.get("price_netto", 0)) * 1.08, 2))
         }
 
         # Validate form data
-        if not all(form_data.values()):
-            flash("Proszę wypełnić wszystkie pola formularza", "error")
+        if not all(value for key, value in form_data.items() if key != "all_in_one"):
+            flash("Proszę wypełnić wszystkie wymagane pola formularza", "error")
             return redirect(url_for("index"))
 
+        # Get output format
+        output_format = request.form.get("format", "docx")
+
         # Generate document
-        output_filename = doc_handler.generate_document(form_data)
-        
+        output_filename = doc_handler.generate_document(form_data, output_format)
+
         # Send file
         return send_file(
             output_filename,
             as_attachment=True,
-            download_name=f"Oferta_{form_data['client_name']}.docx"
+            download_name=f"Oferta_{form_data['client_name']}.{output_format}"
         )
 
     except Exception as e:
@@ -55,8 +61,12 @@ def generate_document():
 def preview_document():
     try:
         form_data = request.form.to_dict()
+        if form_data.get("price_netto") and not form_data.get("price_brutto"):
+            form_data["price_brutto"] = str(round(float(form_data["price_netto"]) * 1.08, 2))
+        form_data["all_in_one"] = "tak" if form_data.get("all_in_one") else "nie"
+
         preview_html = doc_handler.generate_preview(form_data)
-        return render_template("preview.html", preview_content=preview_html)
+        return preview_html
     except Exception as e:
         logger.error(f"Error generating preview: {str(e)}")
         return "Błąd podczas generowania podglądu", 500
