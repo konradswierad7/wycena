@@ -1,0 +1,54 @@
+/* Custom styles to complement Bootstrap */
+.preview-document {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--bs-dark);
+    border-radius: 8px;
+}
+
+.preview-header {
+    border-bottom: 1px solid var(--bs-secondary);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+.preview-content {
+    margin-bottom: 2rem;
+}
+
+.preview-footer {
+    border-top: 1px solid var(--bs-secondary);
+    margin-top: 2rem;
+    padding-top: 1rem;
+}
+
+/* Form styling */
+.form-label {
+    font-weight: 500;
+}
+
+/* Modal customization */
+.modal-content {
+    background-color: var(--bs-dark);
+    border: 1px solid var(--bs-secondary);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--bs-secondary);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--bs-secondary);
+}
+
+/* Card customization */
+.card {
+    background-color: var(--bs-dark);
+    border: 1px solid var(--bs-secondary);
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--bs-secondary);
+}
