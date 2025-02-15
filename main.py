@@ -31,6 +31,8 @@ def generate_document():
             "pump_model": request.form.get("pump_model", ""),
             "power": request.form.get("power", ""),
             "all_in_one": "tak" if request.form.get("all_in_one") else "nie",
+            "kit_number": request.form.get("kit_number", ""),
+            "wifi_adapter": request.form.get("wifi_adapter"),
             "water_tank": request.form.get("water_tank", ""),
             "heat_buffer": request.form.get("heat_buffer", ""),
             "price_brutto": request.form.get("price_brutto") or str(round(float(request.form.get("price_netto", 0)) * 1.08, 2))
@@ -38,42 +40,25 @@ def generate_document():
 
         # Validate form data
         required_fields = ["client_name", "street", "city", "postal_code", "email", "phone", 
-                         "pump_model", "power", "water_tank", "heat_buffer"]
+                         "pump_model", "power", "water_tank"]
         if not all(form_data.get(field) for field in required_fields):
             flash("Proszę wypełnić wszystkie wymagane pola formularza", "error")
             return redirect(url_for("index"))
 
-        # Get output format
-        output_format = request.form.get("format", "docx")
-
         # Generate document
-        output_filename = doc_handler.generate_document(form_data, output_format)
+        output_filename = doc_handler.generate_document(form_data)
 
         # Send file
         return send_file(
             output_filename,
             as_attachment=True,
-            download_name=f"Oferta_{form_data['client_name']}.{output_format}"
+            download_name=f"Oferta_{form_data['client_name']}.docx"
         )
 
     except Exception as e:
         logger.error(f"Error generating document: {str(e)}")
         flash("Wystąpił błąd podczas generowania dokumentu", "error")
         return redirect(url_for("index"))
-
-@app.route("/preview", methods=["POST"])
-def preview_document():
-    try:
-        form_data = request.form.to_dict()
-        if form_data.get("price_netto") and not form_data.get("price_brutto"):
-            form_data["price_brutto"] = str(round(float(form_data["price_netto"]) * 1.08, 2))
-        form_data["all_in_one"] = "tak" if form_data.get("all_in_one") else "nie"
-
-        preview_html = doc_handler.generate_preview(form_data)
-        return preview_html
-    except Exception as e:
-        logger.error(f"Error generating preview: {str(e)}")
-        return "Błąd podczas generowania podglądu", 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

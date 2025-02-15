@@ -39,14 +39,23 @@ class DocumentHandler:
                 elif text.startswith("E-mail:"):
                     new_text = f"E-mail: {data.get('email', '')}"
                 elif text.startswith("Tel."):
-                    new_text = f"Tel. {data.get('phone', '')}"
+                    phone = data.get('phone', '').replace('-', ' ')
+                    new_text = f"Tel. {phone}"
                 elif text.startswith("PANASONIC"):
                     pump_type = "all-in-one" if data.get("all_in_one") == "tak" else "split"
-                    new_text = f"PANASONIC {data.get('pump_model', '')} {data.get('power', '')}kW ({pump_type}) – zestaw"
+                    kit_text = ""
+                    if data.get('kit_number'):
+                        kit_text = f"zestaw {data.get('kit_number').upper()}"
+                        if data.get('wifi_adapter') == "on":
+                            kit_text += " + adapter WiFi"
+                    new_text = f"PANASONIC {data.get('pump_model', '')} {data.get('power', '')}kW ({pump_type}) – {kit_text}"
                 elif text.startswith("zbiornik ciepłej wody:"):
                     new_text = f"zbiornik ciepłej wody: {data.get('water_tank', '')}"
                 elif text.startswith("bufor ciepła:"):
-                    new_text = f"bufor ciepła: {data.get('heat_buffer', '')}"
+                    heat_buffer = data.get('heat_buffer', '')
+                    if not heat_buffer:
+                        continue  # Skip this paragraph if heat_buffer is empty
+                    new_text = f"bufor ciepła: {heat_buffer}"
                 elif "Cena całkowita:" in text:
                     new_text = f"Cena całkowita: **{data.get('price_brutto', '')} zł brutto** (z 8% VAT)"
                 else:
@@ -70,17 +79,8 @@ class DocumentHandler:
             # Generate unique filename
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             os.makedirs("generated_docs", exist_ok=True)
-            base_filename = f"generated_docs/oferta_{timestamp}"
-
-            # Save document as DOCX
-            docx_filename = f"{base_filename}.docx"
+            docx_filename = f"generated_docs/oferta_{timestamp}.docx"
             doc.save(docx_filename)
-
-            if output_format == 'pdf':
-                # Convert to PDF
-                pdf_filename = f"{base_filename}.pdf"
-                convert(docx_filename, pdf_filename)
-                return pdf_filename
 
             return docx_filename
 
@@ -104,7 +104,6 @@ class DocumentHandler:
                     PANASONIC {pump_model} {power}kW ({pump_type})<br>
                     Zbiornik CWU: {water_tank}<br>
                     Bufor ciepła: {heat_buffer}</p>
-
                     <p><strong>Cena całkowita:</strong> {price_brutto} zł brutto (z 8% VAT)</p>
                 </div>
             </div>

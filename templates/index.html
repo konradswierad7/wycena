@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="phone" class="form-label">Telefon*</label>
-                                <input type="tel" class="form-control" id="phone" name="phone" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="000-000-000">
+                                <input type="tel" class="form-control" id="phone" name="phone" required placeholder="000 000 000">
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,17 @@
                             <div class="col-12">
                                 <div class="form-check mb-3">
                                     <input type="checkbox" class="form-check-input" id="all_in_one" name="all_in_one">
-                                    <label class="form-check-label" for="all_in-one">All-in-one</label>
+                                    <label class="form-check-label" for="all_in_one">All-in-one</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="kit_number" class="form-label">Numer zestawu</label>
+                                <input type="text" class="form-control" id="kit_number" name="kit_number" placeholder="np. KIT-ADC09K3E5">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check mt-4">
+                                    <input type="checkbox" class="form-check-input" id="wifi_adapter" name="wifi_adapter">
+                                    <label class="form-check-label" for="wifi_adapter">Adapter WiFi w zestawie</label>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -63,8 +73,8 @@
                                 <input type="text" class="form-control" id="water_tank" name="water_tank" required placeholder="np. Galmet 250 litrów">
                             </div>
                             <div class="col-12">
-                                <label for="heat_buffer" class="form-label">Bufor ciepła*</label>
-                                <input type="text" class="form-control" id="heat_buffer" name="heat_buffer" required placeholder="np. Galmet">
+                                <label for="heat_buffer" class="form-label">Bufor ciepła</label>
+                                <input type="text" class="form-control" id="heat_buffer" name="heat_buffer" placeholder="np. Galmet">
                             </div>
                         </div>
                     </div>
@@ -85,39 +95,12 @@
                         </div>
                     </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-secondary" onclick="previewDocument()">
-                            <i class="bi bi-eye"></i> Podgląd
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" name="format" value="docx">
+                            <i class="bi bi-file-earmark-word"></i> Generuj dokument
                         </button>
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-primary" name="format" value="docx">
-                                <i class="bi bi-file-earmark-word"></i> Generuj DOCX
-                            </button>
-                            <button type="submit" class="btn btn-primary" name="format" value="pdf">
-                                <i class="bi bi-file-earmark-pdf"></i> Generuj PDF
-                            </button>
-                        </div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Podgląd dokumentu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="previewContent">
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Ładowanie...</span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
