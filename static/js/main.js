@@ -50,39 +50,41 @@ function calculateVAT() {
 document.addEventListener('DOMContentLoaded', function() {
     const nettoInput = document.getElementById('price_netto');
     const bruttoInput = document.getElementById('price_brutto');
-
-    nettoInput.addEventListener('input', calculateVAT);
-
-    bruttoInput.addEventListener('input', function() {
-        if (this.value) {
-            nettoInput.setAttribute('readonly', true);
-        } else {
-            nettoInput.removeAttribute('readonly');
-        }
-    });
-
-    // Validate postal code format
+    const phoneInput = document.getElementById('phone');
     const postalCodeInput = document.getElementById('postal_code');
-    postalCodeInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 2) {
-            value = value.slice(0, 2) + '-' + value.slice(2);
-        }
-        e.target.value = value;
-    });
 
-    // Set default date to today
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('date').value = today;
-});
+    // Price calculations
+    if (nettoInput && bruttoInput) {
+        nettoInput.addEventListener('input', calculateVAT);
+        bruttoInput.addEventListener('input', function() {
+            if (this.value) {
+                nettoInput.setAttribute('readonly', true);
+            } else {
+                nettoInput.removeAttribute('readonly');
+            }
+        });
+    }
 
-// Price input formatting
-document.getElementById('price').addEventListener('input', function(e) {
-    let value = e.target.value;
-    if (value !== '') {
-        value = parseFloat(value).toFixed(2);
-        if (!isNaN(value)) {
+    // Postal code formatting
+    if (postalCodeInput) {
+        postalCodeInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '-' + value.slice(2);
+            }
             e.target.value = value;
-        }
+        });
+    }
+
+    // Phone number formatting
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 9) {
+                value = value.slice(0, 9);
+                value = value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6);
+            }
+            e.target.value = value;
+        });
     }
 });

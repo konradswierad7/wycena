@@ -1,0 +1,26 @@
+## Struktura projektu:
+
+### Pliki główne:
+1. main.py - główny plik aplikacji Flask
+2. document_handler.py - obsługa generowania dokumentów
+3. create_template.py - skrypt do tworzenia szablonu dokumentu
+
+### Szablony (templates):
+1. base.html - szablon bazowy
+2. index.html - formularz generatora
+3. preview.html - podgląd dokumentu
+
+### Statyczne (static):
+1. css/style.css - style CSS
+2. js/main.js - skrypty JavaScript
+
+### Zainstalowane zależności (pyproject.toml):
+- flask
+- python-docx
+- docx2pdf
+- flask-wtf
+- email-validator
+
+### Inne:
+- attached_assets/chat.docx - wzór dokumentu
+- generated_docs/ - folder na wygenerowane dokumenty
