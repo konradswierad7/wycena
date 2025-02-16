@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title h4 mb-0">Generator Ofert</h2>
+            </div>
+            <div class="card-body">
+                <form id="offerForm" method="post" action="{{ url_for('generate_document') }}">
+                    <!-- Dane klienta -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Dane klienta</h5>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="client_name" class="form-label">Imię i nazwisko*</label>
+                                <input type="text" class="form-control" id="client_name" name="client_name" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="street" class="form-label">Ulica*</label>
+                                <input type="text" class="form-control" id="street" name="street" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="city" class="form-label">Miasto*</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="postal_code" class="form-label">Kod pocztowy*</label>
+                                <input type="text" class="form-control" id="postal_code" name="postal_code" required pattern="[0-9]{2}-[0-9]{3}" placeholder="00-000">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="email" class="form-label">E-mail*</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="phone" class="form-label">Telefon*</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required placeholder="000 000 000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Szczegóły pompy -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Szczegóły techniczne</h5>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="pump_model" class="form-label">Pompa Panasonic*</label>
+                                <input type="text" class="form-control" id="pump_model" name="pump_model" required placeholder="np. seria K">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="power" class="form-label">Moc (kW)*</label>
+                                <input type="number" class="form-control" id="power" name="power" required min="0" step="0.1">
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check mb-3">
+                                    <input type="checkbox" class="form-check-input" id="all_in_one" name="all_in_one">
+                                    <label class="form-check-label" for="all_in_one">All-in-one</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="kit_number" class="form-label">Numer zestawu</label>
+                                <input type="text" class="form-control" id="kit_number" name="kit_number" placeholder="np. KIT-ADC09K3E5">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check mt-4">
+                                    <input type="checkbox" class="form-check-input" id="wifi_adapter" name="wifi_adapter">
+                                    <label class="form-check-label" for="wifi_adapter">Adapter WiFi w zestawie</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="water_tank" class="form-label">Zbiornik CWU*</label>
+                                <input type="text" class="form-control" id="water_tank" name="water_tank" required placeholder="np. Galmet 250 litrów">
+                            </div>
+                            <div class="col-12">
+                                <label for="heat_buffer" class="form-label">Bufor ciepła</label>
+                                <input type="text" class="form-control" id="heat_buffer" name="heat_buffer" placeholder="np. Galmet">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cena -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Cena</h5>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="price_netto" class="form-label">Cena netto (PLN)</label>
+                                <input type="number" class="form-control" id="price_netto" name="price_netto" min="0" step="0.01">
+                                <small class="form-text text-muted">Automatyczne przeliczenie na brutto (VAT 8%)</small>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="price_brutto" class="form-label">Cena brutto (PLN)</label>
+                                <input type="number" class="form-control" id="price_brutto" name="price_brutto" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" name="format" value="docx">
+                            <i class="bi bi-file-earmark-word"></i> Generuj dokument
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
